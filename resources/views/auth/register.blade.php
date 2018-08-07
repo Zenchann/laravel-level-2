@@ -61,6 +61,13 @@
                             </div>
                         </div>
 
+                        <div class="form-group row {{ $errors->has('g-recaptcha-response') ? ' has-error' : '' }}">
+                            <div class="col-md-12">
+                            {!! app('captcha')->display() !!}
+                            {!! $errors->first('g-recaptcha-response', '<p class="help-block">:message</p>') !!}
+                            </div>
+                        </div>
+
                         <div class="form-group row mb-0">
                             <div class="col-md-6 offset-md-4">
                                 <button type="submit" class="btn btn-primary">

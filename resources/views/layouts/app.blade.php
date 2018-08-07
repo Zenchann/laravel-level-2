@@ -16,11 +16,17 @@
     <!-- Fonts -->
     <link rel="dns-prefetch" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css?family=Raleway:300,400,600" rel="stylesheet" type="text/css">
-
+    <link rel="shortcut icon" href="{{ asset('img/ico.png') }}" />
     <!-- Styles -->
+    
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/font-awesome.min.css') }}" rel="stylesheet">
     <link href="{{ asset('css/jquery.dataTables.css') }}" rel="stylesheet">
     <link href="{{ asset('css/dataTables.bootstrap4.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/selectize.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/selectize.bootstrap3.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/bootstrap.css') }}" rel="stylesheet">
+    
 </head>
 <body>
     <div id="app">
@@ -38,14 +44,28 @@
                     <!-- Left Side Of Navbar -->
                     <ul class="navbar-nav mr-auto">
                         @if (Auth::check())
-                            <li class="nav-item">
-                                <a class="nav-link" href="{{ url('/') }}">Home</a>
+                            <li class="nav-item {{ Request::is('home') ? 'active ' : '' }}">
+                                <a class="nav-link" href="{{ url('/home') }}">Dashboard</a>
                             </li>
                             @role('admin')
-                            <li class="nav-item">
+                            <li class="nav-item {{ Request::is('admin/authors') ? 'active ' : '' }}">
                                 <a class="nav-link" href="{{ route('authors.index') }}">Penulis</a>
                             </li>
+                            <li class="nav-item {{ Request::is('admin/books') ? 'active ' : '' }}">
+                                <a class="nav-link" href="{{ route('books.index') }}">Buku</a>
+                            </li>
+                            <li class="nav-item {{ Request::is('admin/members') ? 'active ' : '' }}">
+                                <a class="nav-link" href="{{ route('members.index') }}">Member</a>
+                            </li>
+                            <li class="nav-item {{ Request::is('admin/statistics') ? 'active ' : '' }}">
+                                <a class="nav-link" href="{{ route('statistics.index') }}">Statistik</a>
+                            </li>
                             @endrole
+                            @if (auth()->check())
+                                <li class="nav-item {{ Request::is('settings/profile') ? 'active ' : '' }}">
+                                    <a class="nav-link" href="{{ url('/settings/profile') }}">Profil</a>
+                                </li>
+                            @endif
                         @endif
                     </ul>
 
@@ -66,12 +86,12 @@
                                 </a>
 
                                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                                    <a class="dropdown-item" href="{{ url('/settings/password') }}"><i class="fa fa-btn fa-lock"></i> Ubah Password</a>
                                     <a class="dropdown-item" href="{{ route('logout') }}"
                                        onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">
                                         {{ __('Logout') }}
                                     </a>
-
                                     <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                                         @csrf
                                     </form>
@@ -92,6 +112,11 @@
     <script src="{{ asset('js/app.js') }}"></script>
     <script src="{{ asset('js/jquery.dataTables.min.js') }}"></script>
     <script src="{{ asset('js/dataTables.bootstrap4.min.js') }}"></script>
+    <script src="{{ asset('/js/custom.js') }}"></script>
+    <script src="{{ asset('/js/selectize.min.js') }}"></script>
+    <script src='https://www.google.com/recaptcha/api.js'></script>
+    <script src="/js/Chart.min.js"></script>
+    <script src="/js/moment.js"></script>
     @yield('scripts')
 </body>
 </html>

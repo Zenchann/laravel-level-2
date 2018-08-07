@@ -19,19 +19,21 @@ class AuthorController extends Controller
     public function index(Request $request, Builder $builder)
     {
         if ($request->ajax()) {
-            $authors = Author::select(['id', 'name']);
+            $authors = Author::select(['id','name']);
             return Datatables::of($authors)
                     ->addColumn('action', function ($author) {
                         return view('datatable._action', [
                         'model'=> $author,
                         'form_url'=> route('authors.destroy', $author->id),
                         'edit_url' => route('authors.edit', $author->id),
+                        'show_url' => route('authors.show', $author->id),
+                        'confirm_message' => 'Yakin mau menghapus ' . $author->name . '?'
                     ]);
                     })->make(true);
         }
         $html = $builder
             ->addColumn(['data' => 'name', 'name'=>'name', 'title'=>'Nama'])
-            ->addColumn(['data' => 'action', 'name'=>'action', 'title'=>'', 'orderable'=>false,
+            ->addColumn(['data' => 'action', 'name'=>'action', 'title'=>'Action', 'orderable'=>false,
                          'searchable'=>false]);
         return view('author.index', compact('html'));
     }
@@ -85,7 +87,7 @@ class AuthorController extends Controller
     public function edit(Author $author)
     {
         $author = Author::findOrFail($author->id);
-        return view('author.edit')->with(compact('author'));
+        return view('author.edit', compact('author'));
     }
 
     /**
@@ -117,7 +119,9 @@ class AuthorController extends Controller
      */
     public function destroy(Author $author)
     {
-        Author::destroy($author->id);
+        if (!Author::destroy($author->id)) {
+            return redirect()->back();
+        }
         Session::flash("flash_notification", [
         "level"=>"success",
         "message"=>"Penulis berhasil dihapus"
