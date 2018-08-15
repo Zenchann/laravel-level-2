@@ -62,7 +62,7 @@
                         </div>
 
                         <div class="form-group row {{ $errors->has('g-recaptcha-response') ? ' has-error' : '' }}">
-                            <div class="col-md-12">
+                            <div class="col-md-6" style="display: inline-block;  text-align: center;">
                             {!! app('captcha')->display() !!}
                             {!! $errors->first('g-recaptcha-response', '<p class="help-block">:message</p>') !!}
                             </div>

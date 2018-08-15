@@ -7,8 +7,8 @@ use Session;
 
 class Book extends Model
 {
-    protected $fillable = ['title','author_id','cover','amount'];
-    
+    protected $fillable = ['title', 'author_id', 'cover', 'amount'];
+
     public function author()
     {
         return $this->belongsTo('App\Author', 'author_id');
@@ -32,18 +32,18 @@ class Book extends Model
         self::updating(function ($book) {
             if ($book->amount < $book->borrowed) {
                 Session::flash("flash_notification", [
-                        "level"=>"danger",
-                        "message"=>"Jumlah buku <b>$book->title</b> harus >= " . $book->borrowed
-                        ]);
+                    "level" => "danger",
+                    "message" => "Jumlah buku <b>$book->title</b> harus >= " . $book->borrowed,
+                ]);
                 return false;
             }
         });
         self::deleting(function ($book) {
             if ($book->borrowLogs()->count() > 0) {
                 Session::flash("flash_notification", [
-                        "level"=>"danger",
-                        "message"=>"Buku <b>$book->title</b> sudah pernah dipinjam."
-                        ]);
+                    "level" => "danger",
+                    "message" => "Buku <b>$book->title</b> sudah pernah dipinjam.",
+                ]);
                 return false;
             }
         });
